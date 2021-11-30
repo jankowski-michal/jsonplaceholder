@@ -26,6 +26,7 @@ class PostService implements PostUseCase {
     }
 
     private void storePost(Post post) {
-        fileStorage.save(post.getTitle(), post.toString());
+        String name = "" + post.getId() + ".json";
+        fileStorage.save(name, post.toString());
     }
 }
