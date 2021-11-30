@@ -1,8 +1,9 @@
 package com.jankowskimichal.JsonPlaceholder.posts.application;
 
-import com.jankowskimichal.JsonPlaceholder.network.port.RestService;
+import com.jankowskimichal.JsonPlaceholder.posts.application.port.PostFileMapper;
 import com.jankowskimichal.JsonPlaceholder.posts.application.port.PostUseCase;
 import com.jankowskimichal.JsonPlaceholder.posts.domain.Post;
+import com.jankowskimichal.JsonPlaceholder.rest.port.RestService;
 import com.jankowskimichal.JsonPlaceholder.storage.port.FileStorage;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ class PostService implements PostUseCase {
 
     private final RestService restService;
     private final FileStorage fileStorage;
+    private final PostFileMapper fileMapper;
 
     @Override
     public void fetchAndStorePosts() {
@@ -26,7 +28,8 @@ class PostService implements PostUseCase {
     }
 
     private void storePost(Post post) {
-        String name = "" + post.getId() + ".json";
-        fileStorage.save(name, post.toString());
+        String fileName = fileMapper.getFileName(post);
+        String content = fileMapper.getFileContent(post);
+        fileStorage.save(fileName, content);
     }
 }

@@ -1,4 +1,4 @@
-package com.jankowskimichal.JsonPlaceholder.network.port;
+package com.jankowskimichal.JsonPlaceholder.rest.port;
 
 import java.util.Optional;
 

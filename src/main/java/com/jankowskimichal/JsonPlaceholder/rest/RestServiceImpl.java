@@ -1,6 +1,6 @@
-package com.jankowskimichal.JsonPlaceholder.network;
+package com.jankowskimichal.JsonPlaceholder.rest;
 
-import com.jankowskimichal.JsonPlaceholder.network.port.RestService;
+import com.jankowskimichal.JsonPlaceholder.rest.port.RestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
