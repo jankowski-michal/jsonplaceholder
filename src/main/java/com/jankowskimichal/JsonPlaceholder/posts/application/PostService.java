@@ -5,22 +5,28 @@ import com.jankowskimichal.JsonPlaceholder.posts.application.port.PostUseCase;
 import com.jankowskimichal.JsonPlaceholder.posts.domain.Post;
 import com.jankowskimichal.JsonPlaceholder.rest.port.RestService;
 import com.jankowskimichal.JsonPlaceholder.storage.port.FileStorage;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
 @Service
-@AllArgsConstructor
 class PostService implements PostUseCase {
 
     private final RestService restService;
     private final FileStorage fileStorage;
     private final PostFileMapper fileMapper;
+    private final String url;
+
+    public PostService(RestService restService, FileStorage fileStorage, PostFileMapper fileMapper,@Value("${posts.url}") String url) {
+        this.restService = restService;
+        this.fileStorage = fileStorage;
+        this.fileMapper = fileMapper;
+        this.url = url;
+    }
 
     @Override
     public void fetchAndStorePosts() {
-        String url = "https://jsonplaceholder.typicode.com/posts";
         Post[] posts = restService
                 .getJson(url, Post[].class)
                 .orElse(new Post[0]);
