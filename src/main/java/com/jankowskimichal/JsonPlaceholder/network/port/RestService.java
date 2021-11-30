@@ -1,6 +1,8 @@
 package com.jankowskimichal.JsonPlaceholder.network.port;
 
+import java.util.Optional;
+
 public interface RestService {
 
-    <T> T getJson(String url);
+    <T> Optional<T> getJson(String url, Class<T> responseType);
 }

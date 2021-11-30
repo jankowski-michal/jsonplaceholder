@@ -5,10 +5,9 @@ import com.jankowskimichal.JsonPlaceholder.posts.application.port.PostUseCase;
 import com.jankowskimichal.JsonPlaceholder.posts.domain.Post;
 import com.jankowskimichal.JsonPlaceholder.storage.port.FileStorage;
 import lombok.AllArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Arrays;
 
 @Service
 @AllArgsConstructor
@@ -19,8 +18,11 @@ class PostService implements PostUseCase {
 
     @Override
     public void fetchAndStorePosts() {
-        List<Post> post = restService.getJson("https://jsonplaceholder.typicode.com/posts");
-        CollectionUtils.emptyIfNull(post).forEach(this::storePost);
+        String url = "https://jsonplaceholder.typicode.com/posts";
+        Post[] posts = restService
+                .getJson(url, Post[].class)
+                .orElse(new Post[0]);
+        Arrays.stream(posts).forEach(this::storePost);
     }
 
     private void storePost(Post post) {
