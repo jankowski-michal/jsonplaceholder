@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 class PostService implements PostUseCase {
@@ -18,7 +21,7 @@ class PostService implements PostUseCase {
     private final PostFileMapper fileMapper;
     private final String url;
 
-    public PostService(RestService restService, FileStorage fileStorage, PostFileMapper fileMapper,@Value("${posts.url}") String url) {
+    public PostService(RestService restService, FileStorage fileStorage, PostFileMapper fileMapper, @Value("${posts.url}") String url) {
         this.restService = restService;
         this.fileStorage = fileStorage;
         this.fileMapper = fileMapper;
@@ -30,7 +33,15 @@ class PostService implements PostUseCase {
         Post[] posts = restService
                 .getJson(url, Post[].class)
                 .orElse(new Post[0]);
-        Arrays.stream(posts).forEach(this::storePost);
+        Arrays.stream(posts)
+                .collect(groupingBy(Post::getUserId))
+                .forEach(this::storeUserPost);
+    }
+
+    private void storeUserPost(Long userId, List<Post> posts) {
+        String fileName = fileMapper.getFileName(userId);
+        String content = fileMapper.getFileContent(posts);
+        fileStorage.save(fileName, content);
     }
 
     private void storePost(Post post) {

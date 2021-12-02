@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 class PostFileMapperImpl implements PostFileMapper {
     private final static Logger LOGGER = LoggerFactory.getLogger(PostFileMapperImpl.class);
@@ -17,7 +19,12 @@ class PostFileMapperImpl implements PostFileMapper {
 
     @Override
     public String getFileName(Post post) {
-        return post.getId() + ".json";
+        return getFileName(post.getId());
+    }
+
+    @Override
+    public String getFileName(Long id) {
+        return id + ".json";
     }
 
     @Override
@@ -26,6 +33,16 @@ class PostFileMapperImpl implements PostFileMapper {
             return writer.writeValueAsString(post);
         } catch (JsonProcessingException e) {
             LOGGER.info("Failed to format post to JSON, post: {}", post.toString());
+            return "";
+        }
+    }
+
+    @Override
+    public String getFileContent(List<Post> posts) {
+        try {
+            return writer.writeValueAsString(posts);
+        } catch (JsonProcessingException e) {
+            LOGGER.info("Failed to format post to JSON, post: {}", posts.toString());
             return "";
         }
     }

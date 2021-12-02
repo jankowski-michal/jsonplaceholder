@@ -24,6 +24,7 @@ import java.util.Optional;
 class PostServiceIT {
     final String url = "https://jsonplaceholder.typicode.com/posts";
     final Charset charset = StandardCharsets.UTF_8;
+
     @MockBean
     RestService restService;
     @Autowired
@@ -35,6 +36,7 @@ class PostServiceIT {
 
     @BeforeEach
     void setUp() {
+        // fixme - use temp dir
         deleteFile("1.json");
         deleteFile("2.json");
     }
@@ -66,25 +68,25 @@ class PostServiceIT {
         String file1Content = FileUtils.readFileToString(new File("1.json"), charset);
         String file2Content = FileUtils.readFileToString(new File("2.json"), charset);
         Assertions.assertEquals(
-                "{\n" +
-                        "  \"userId\" : 2,\n" +
+                "[ {\n" +
+                        "  \"userId\" : 1,\n" +
                         "  \"id\" : 1,\n" +
                         "  \"title\" : \"a title\",\n" +
                         "  \"body\" : \"body 1\"\n" +
-                        "}", file1Content);
+                        "} ]", file1Content);
         Assertions.assertEquals(
-                "{\n" +
+                "[ {\n" +
                         "  \"userId\" : 2,\n" +
-                        "  \"id\" : 2,\n" +
+                        "  \"id\" : 1,\n" +
                         "  \"title\" : \"a title\",\n" +
                         "  \"body\" : \"body 2\"\n" +
-                        "}", file2Content);
+                        "} ]", file2Content);
     }
 
-    private Post getPost(Long id, String body) {
+    private Post getPost(Long userId, String body) {
         Post post = new Post();
-        post.setUserId(2L);
-        post.setId(id);
+        post.setUserId(userId);
+        post.setId(1L);
         post.setTitle("a title");
         post.setBody(body);
         return post;

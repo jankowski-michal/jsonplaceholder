@@ -1,6 +1,6 @@
 # Goal
 
 Write application that will fetch all posts from JSONPlaceholder API.
-Each post should be stored in separate file <postId>.json
+Posts should be grouped by user and stored in separate file <userId>.json
 
 https://jsonplaceholder.typicode.com/
